@@ -1,7 +1,6 @@
 <?php
-// done.php
 
-include_once __DIR__.'/config.php';
+require_once __DIR__.'/config.php';
 
 use Payum\Core\Request\GetHumanStatus;
 use Payum\Core\Security\TokenInterface;

@@ -11,7 +11,7 @@ The preferred way to install the library is using [composer](http://getcomposer.
 Run:
 
 ```bash
-php composer.phar require "pixers/payum-adyen"
+php composer.phar require "jroszkiewicz/payum-adyen"
 ```
 
 ## Configuration
@@ -125,6 +125,7 @@ payum:
 
 ## License
 
+Copyright 2021 Jakub Roszkiewicz
 Copyright 2016 PIXERS Ltd - www.pixersize.com
 
 Licensed under the [BSD 3-Clause](LICENSE)

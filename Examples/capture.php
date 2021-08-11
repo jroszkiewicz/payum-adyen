@@ -1,7 +1,6 @@
 <?php
-// capture.php
 
-include_once __DIR__.'/config.php';
+require_once __DIR__.'/config.php';
 
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Reply\HttpRedirect;
@@ -24,7 +23,7 @@ if ($reply = $gateway->execute(new Capture($token), true)) {
         exit();
     }
 
-    throw new \LogicException('Unsupported reply', null, $reply);
+    throw new LogicException('Unsupported reply', null, $reply);
 }
 
 $payum->getHttpRequestVerifier()->invalidate($token);
