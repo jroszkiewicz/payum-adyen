@@ -1,5 +1,8 @@
 <?php
-namespace Payum\Adyen\Tests\Action;
+
+declare(strict_types=1);
+
+namespace Tests\Payum\Adyen\Action;
 
 use Payum\Adyen\Action\StatusAction;
 use Payum\Core\Request\GetHumanStatus;
@@ -8,203 +11,160 @@ use Payum\Core\Tests\GenericActionTest;
 class StatusActionTest extends GenericActionTest
 {
     protected $actionClass = StatusAction::class;
-
+    
     protected $requestClass = GetHumanStatus::class;
-
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfDetailsEmpty()
+    
+    public function testShouldMarkNewIfDetailsEmpty(): void
     {
         $action = new StatusAction();
-
+        
         $action->execute($status = new GetHumanStatus([]));
-
-        $this->assertTrue($status->isNew());
+        
+        self::assertTrue($status->isNew());
     }
-
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfResponseStatusIsFailed()
+    
+    public function testShouldMarkFailedIfResponseStatusIsFailed(): void
     {
         $action = new StatusAction();
-
+        
         $action->execute($status = new GetHumanStatus([
-            'authResult' => 'Something',
+            'authResult'      => 'Something',
             'response_status' => 400,
         ]));
-
-        $this->assertTrue($status->isFailed());
+        
+        self::assertTrue($status->isFailed());
     }
-
-    /**
-     * @test
-     */
-    public function shouldMarkAuthorizedIfResponseStatusIsOkAndAuthResultIsAuthorised()
+    
+    public function testShouldMarkAuthorizedIfResponseStatusIsOkAndAuthResultIsAuthorised(): void
     {
         $action = new StatusAction();
-
+        
         $action->execute($status = new GetHumanStatus([
-            'authResult' => 'AUTHORISED',
+            'authResult'      => 'AUTHORISED',
             'response_status' => 200,
         ]));
-
-        $this->assertTrue($status->isAuthorized());
+        
+        self::assertTrue($status->isAuthorized());
     }
-
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfAuthResultIsNull()
+    
+    public function testShouldMarkNewIfAuthResultIsNull(): void
     {
         $action = new StatusAction();
-
+        
         $action->execute($status = new GetHumanStatus([
             'authResult' => null,
         ]));
-
-        $this->assertTrue($status->isNew());
+        
+        self::assertTrue($status->isNew());
     }
-
-    /**
-     * @test
-     */
-    public function shouldMarkAuthorizedIfAuthResultIsAuthorized()
+    
+    public function testShouldMarkAuthorizedIfAuthResultIsAuthorized(): void
     {
         $action = new StatusAction();
-
+        
         $action->execute($status = new GetHumanStatus([
             'authResult' => 'AUTHORISED',
         ]));
-
-        $this->assertTrue($status->isAuthorized());
+        
+        self::assertTrue($status->isAuthorized());
     }
-
-    /**
-     * @test
-     */
-    public function shouldMarkPendindIfAuthResultIsPending()
+    
+    public function testShouldMarkPendindIfAuthResultIsPending(): void
     {
         $action = new StatusAction();
-
+        
         $action->execute($status = new GetHumanStatus([
             'authResult' => 'PENDING',
         ]));
-
-        $this->assertTrue($status->isPending());
+        
+        self::assertTrue($status->isPending());
     }
-
-    /**
-     * @test
-     */
-    public function shouldMarkCaptureIfAuthResultIsCapture()
+    
+    public function testShouldMarkCaptureIfAuthResultIsCapture(): void
     {
         $action = new StatusAction();
-
+        
         $action->execute($status = new GetHumanStatus([
             'authResult' => 'CAPTURE',
         ]));
-
-        $this->assertTrue($status->isCaptured());
+        
+        self::assertTrue($status->isCaptured());
     }
-
-    /**
-     * @test
-     */
-    public function shouldMarkCanceledIfAuthResultIsCanceled()
+    
+    public function testShouldMarkCanceledIfAuthResultIsCanceled(): void
     {
         $action = new StatusAction();
-
+        
         $action->execute($status = new GetHumanStatus([
             'authResult' => 'CANCELLED',
         ]));
-
-        $this->assertTrue($status->isCanceled());
+        
+        self::assertTrue($status->isCanceled());
     }
-
-    /**
-     * @test
-     */
-    public function shouldMarkFaildeIfAuthResultIsRefused()
+    
+    public function testShouldMarkFaildeIfAuthResultIsRefused(): void
     {
         $action = new StatusAction();
-
+        
         $action->execute($status = new GetHumanStatus([
             'authResult' => 'REFUSED',
         ]));
-
-        $this->assertTrue($status->isFailed());
+        
+        self::assertTrue($status->isFailed());
     }
-
-    /**
-     * @test
-     */
-    public function shouldMarkSuspendedIfAuthResultIsChargeback()
+    
+    public function testShouldMarkSuspendedIfAuthResultIsChargeback(): void
     {
         $action = new StatusAction();
-
+        
         $action->execute($status = new GetHumanStatus([
             'authResult' => 'CHARGEBACK',
         ]));
-
-        $this->assertTrue($status->isSuspended());
+        
+        self::assertTrue($status->isSuspended());
     }
-
-    /**
-     * @test
-     */
-    public function shouldMarkExpiredIfAuthResultIsExpire()
+    
+    public function testShouldMarkExpiredIfAuthResultIsExpire(): void
     {
         $action = new StatusAction();
-
+        
         $action->execute($status = new GetHumanStatus([
             'authResult' => 'EXPIRE',
         ]));
-
-        $this->assertTrue($status->isExpired());
+        
+        self::assertTrue($status->isExpired());
     }
-
-    /**
-     * @test
-     */
-    public function shouldMarkRefundedIfAuthResultIsRefund()
+    
+    public function testShouldMarkRefundedIfAuthResultIsRefund(): void
     {
         $action = new StatusAction();
-
+        
         $action->execute($status = new GetHumanStatus([
             'authResult' => 'REFUND',
         ]));
-
-        $this->assertTrue($status->isRefunded());
+        
+        self::assertTrue($status->isRefunded());
     }
-
-    /**
-     * @test
-     */
-    public function shouldMarkFailedIfAuthResultIsError()
+    
+    public function testShouldMarkFailedIfAuthResultIsError(): void
     {
         $action = new StatusAction();
-
+        
         $action->execute($status = new GetHumanStatus([
             'authResult' => 'ERROR',
         ]));
-
-        $this->assertTrue($status->isFailed());
+        
+        self::assertTrue($status->isFailed());
     }
-
-    /**
-     * @test
-     */
-    public function shouldMarkUnknownIfAuthResultIsUnknown()
+    
+    public function testShouldMarkUnknownIfAuthResultIsUnknown(): void
     {
         $action = new StatusAction();
-
+        
         $action->execute($status = new GetHumanStatus([
             'authResult' => 'SomeStatus',
         ]));
-
-        $this->assertTrue($status->isUnknown());
+        
+        self::assertTrue($status->isUnknown());
     }
-
 }

@@ -1,7 +1,6 @@
 <?php
-// prepare.php
 
-require_once __DIR__.'/config.php';
+require_once __DIR__ . '/config.php';
 
 use Payum\Core\Model\Payment;
 

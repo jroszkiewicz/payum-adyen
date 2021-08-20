@@ -1,17 +1,22 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Payum\Adyen\Action;
 
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 
-class ConvertPaymentAction extends GatewayAwareAction
+class ConvertPaymentAction implements GatewayAwareInterface, ActionInterface
 {
+    use GatewayAwareTrait;
+    
     /**
-     * {@inheritDoc}
-     *
      * @param Convert $request
      */
     public function execute($request)
@@ -34,15 +39,12 @@ class ConvertPaymentAction extends GatewayAwareAction
         $request->setResult((array) $details);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function supports($request)
+    public function supports($request): bool
     {
         return
             $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
-            $request->getTo() == 'array'
+            $request->getTo() === 'array'
         ;
     }
 }

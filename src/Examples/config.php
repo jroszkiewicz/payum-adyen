@@ -1,10 +1,10 @@
 <?php
-// config.php
 
-$autoload = is_file(__DIR__.'/../vendor/autoload.php') ? __DIR__.'/../vendor/autoload.php' : __DIR__.'/../../../../vendor/autoload.php';
+$autoload = is_file(__DIR__ . '/../vendor/autoload.php') ? __DIR__ . '/../vendor/autoload.php' : __DIR__.'/../../../../vendor/autoload.php';
 
 require_once $autoload;
 
+use Payum\Adyen\AdyenGatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\Core\Model\Payment;
 use Payum\Core\PayumBuilder;
@@ -23,8 +23,8 @@ $defaultConfig = [
 
 $builder = new PayumBuilder();
 $builder
-    ->addGatewayFactory($gatewayName, function(array $config, GatewayFactoryInterface $coreGatewayFactory) {
-        return new \Payum\Adyen\AdyenGatewayFactory($config, $coreGatewayFactory);
+    ->addGatewayFactory($gatewayName, static function(array $config, GatewayFactoryInterface $coreGatewayFactory) {
+        return new AdyenGatewayFactory($config, $coreGatewayFactory);
     });
 $builder
     ->addGateway($gatewayName, $defaultConfig);

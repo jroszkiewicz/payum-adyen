@@ -1,11 +1,15 @@
 {
-    "name": "pixers/payum-adyen",
+    "name": "jroszkiewicz/payum-adyen",
     "type": "library",
     "description": "Adyen gateway for Payum",
     "keywords": ["payment", "payum", "adyen"],
     "homepage": "http://payum.org",
     "license": "MIT",
     "authors": [
+        {
+            "name": "Jakub Roszkiewicz",
+            "email": "roszkiewicz.jakub@gmail.com"
+        },
         {
             "name": "Jacek Smyda",
             "email": "jacek.smyda@netteam.pl"
@@ -24,22 +28,23 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0",
-        "payum/core": "^1.3"
+        "php": "^7.4|^8.0",
+        "payum/core": "^1.6",
+        "php-http/guzzle7-adapter": "^1.0",
+        "adyen/php-api-library": "^10.1",
+        "ext-json": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.0"
-    },
-    "config": {
-        "bin-dir": "bin"
+        "phpunit/phpunit": "^9.0"
     },
     "autoload": {
-        "psr-0": { "Payum\\Adyen": "" }
+        "psr-4": {
+            "Payum\\Adyen\\": "src/"
+        }
     },
-    "target-dir": "Payum/Adyen",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Payum\\Adyen\\": "tests/"
         }
     }
 }
