@@ -57,7 +57,7 @@ class CaptureAction implements GatewayAwareInterface, ApiAwareInterface, Generic
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        $this->gateway->execute($httpRequest = new GetHttpRequest()); //?
+        //$this->gateway->execute(new GetHttpRequest()); //?
 
         // Check httpRequest
         $extraData = $model['extraData'] ? json_decode($model['extraData'], true) : [];
@@ -76,35 +76,14 @@ class CaptureAction implements GatewayAwareInterface, ApiAwareInterface, Generic
         }
 
         $model['extraData'] = json_encode($extraData);
-    
+        $model['shopperReference'] = $token->getHash();
+        $model['payment']   = ArrayObject::ensureArrayObject($request->getFirstModel());
         
-    
-        $service = new \Adyen\Service\Checkout($client);
-    
-        $json = '{
-        "reference": "YOUR_PAYMENT_REFERENCE",
-  "amount": {
-    "value": 4200,
-    "currency": "EUR"
-  },
-  "shopperReference": "UNIQUE_SHOPPER_ID_6728",
-  "description": "Blue Bag - ModelM671",
-  "countryCode": "NL",
-  "merchantAccount": "YOUR_MERCHANT_ACCOUNT",
-  "shopperLocale": "nl-NL"
-}';
-    
-        //todo tutaj to sie robi xd
-        $params = json_decode($json, true);
-    
-        $result = $service->paymentLinks($params);
-        
-        dump($result);exit;
+        $result = $this->api->checkout($model);
         
         //?
         throw new HttpPostRedirect(
-            $this->api->getApiEndpoint(),
-            $this->api->prepareFields($model->toUnsafeArray())
+            $result['url']
         );
     }
 

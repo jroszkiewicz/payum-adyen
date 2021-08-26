@@ -30,6 +30,7 @@ class AdyenGatewayFactory extends GatewayFactory
         if (null === $config['payum.api']) {
             $config['payum.default_options'] = [
                 'apiKey'                 => '',
+                'merchantAccount'        => '',
                 'sandbox'                => true,
                 'default_payment_fields' => [],
             ];
@@ -44,6 +45,7 @@ class AdyenGatewayFactory extends GatewayFactory
                 return new Api(
                     [
                         'apiKey'                 => $config['apiKey'],
+                        'merchantAccount'        => $config['merchantAccount'],
                         'sandbox'                => $config['sandbox'],
                         'default_payment_fields' => $config['default_payment_fields'],
                     ]

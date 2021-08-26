@@ -6,12 +6,10 @@ namespace Payum\Adyen;
 
 use Adyen\Client;
 use Adyen\Environment;
-use GuzzleHttp\Psr7\Request;
+use Adyen\Service\Checkout;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\Exception\InvalidArgumentException;
 use Payum\Core\Exception\LogicException;
-use Psr\Http\Message\ResponseInterface;
 
 class Api
 {
@@ -148,9 +146,6 @@ class Api
         $params['shipBeforeDate']  = date('Y-m-d', strtotime('+1 hour'));
         $params['sessionValidity'] = date(DATE_ATOM, strtotime('+1 hour'));
         
-//        $params['skinCode']        = $this->options['skinCode'];
-  //      $params['merchantAccount'] = $this->options['merchantAccount'];
-        
         $supportedParams = array_merge($this->requiredFields, $this->optionalFields, $this->othersFields);
         
         $params = array_filter(array_replace(
@@ -161,25 +156,24 @@ class Api
         return $params;
     }
     
-    
-    /**
-     * @param array $fields
-     *
-     * @return ResponseInterface
-     * @throws HttpException
-     */
-    protected function doRequest(array $fields): ResponseInterface
+    public function checkout(ArrayObject $model)
     {
+        $json = '{
+        "reference": "' . $model['merchantReference'] . '",
+          "amount": {
+            "value": ' . $model['paymentAmount'] . ',
+            "currency": "' . $model['currencyCode'] . '"
+          },
+          "shopperReference": "' . $model['shopperReference'] . '",
+          "description": "' . $model['description'] . '",
+          "countryCode": "' . $model['countryCode'] . '",
+          "merchantAccount": "' . $this->options['merchantAccount'] . '",
+          "shopperLocale": "' . $model['locale'] . '"
+        }';
         
-        $request = new Request('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
-        
-        $response = $this->client->send($request);
-        
-        if (false === ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
-            throw HttpException::factory($request, $response);
-        }
-        
-        // Check response
-        return $response->getBody()->getContents();
+        $service = new Checkout($this->client);
+        $params  = json_decode($json, true);
+    
+        return $service->paymentLinks($params);
     }
 }
